@@ -1,0 +1,15 @@
+    body { font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; padding: 20px; }
+    #map {
+      height: 500px;
+      width: 100%;
+      margin: 20px 0;
+    }
+    .train-item {
+      padding: 10px;
+      margin: 5px 0;
+      border-left: 4px solid;
+    }
+    .Easten { border-color: #fdb918; }
+    .Onehunga { border-color: #00adef; }
+    .Westen { border-color: #99ca3d; }
+    .Southen { border-color: #ed302a; }
