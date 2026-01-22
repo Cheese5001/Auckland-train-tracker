@@ -18,33 +18,70 @@ L.tileLayer('https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png', {
 console.log('Map loaded!');
 
 
-// trains on map
-// Function to add a train marker
+const trainIcons = {
+  'ONE': L.icon({
+    iconUrl: 'train_icons/train_icon_onehunga.svg',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  }),
+  'STH': L.icon({
+    iconUrl: 'train_icons/train_icon_southen.svg',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  }),
+  'EAST': L.icon({
+    iconUrl: 'train_icons/train_icon_easten.svg',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  }),
+  'WEST': L.icon({
+    iconUrl: 'train_icons/train_icon_westen.svg',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  }),
+  'OTHER': L.icon({ 
+    iconUrl: 'train_icons/train_icon_other.svg',
+    iconSize: [28, 28],
+    iconAnchor: [14, 14],
+    popupAnchor: [0, -14]
+  })
+};
+
+// // trains on map
+// // Function to add a train marker
   function addTrainMarker(lat, lon, trainInfo) {
     const marker = L.marker([lat, lon]).addTo(map);
     marker.bindPopup(`<b>${trainInfo}</b>`);
   }
-  
-  // Example: Add a test marker
-  addTrainMarker(-36.8485, 174.7633, 'EAST Line - Train 1');
 
 
 
-// Your API key from Auckland Transport
 const apiKey = 'c2b1e0d02890459eaf091ab8894e285c';
-
-// The URL endpoint (where you're requesting data from)
 const apiUrl = 'https://api.at.govt.nz/realtime/legacy/vehiclelocations';
 
+let trainMarkers = [];
+let openPopupTrainId = null;
+
 // Making the request
-fetch(apiUrl, {
-  headers: {
-    'Ocp-Apim-Subscription-Key': apiKey
-  }
-})
-  .then(response => response.json())  // Convert response to JSON
-  .then(data => {
-    console.log(data); 
+// Auto-refresh train positions every 30 seconds
+function fetchTrains() {
+  fetch(apiUrl, {
+    headers: {
+      'Ocp-Apim-Subscription-Key': apiKey
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Refreshed data:', data); 
+      
+        trainMarkers.forEach(marker => {
+        map.removeLayer(marker);
+        });
+      trainMarkers = [];
 
 
     const trains = data.response.entity
@@ -82,11 +119,56 @@ fetch(apiUrl, {
     
     console.log('Simplified train data:', trains);
     console.log('Number of trains:', trains.length);
-  }) 
+    
+    // NOW ADD TRAINS TO THE MAP
+      
+
+    trains.forEach(train => {
+      // Get the icon for this train line, or use default if not found
+      const icon = trainIcons[train.line] || trainIcons['OTHER'];
+      
+      // Create marker with train picture
+      const marker = L.marker([train.lat, train.lon], {
+        icon: icon
+      }).addTo(map);
+      
+      // Add popup with info
+      marker.bindPopup(`
+        <b>${train.line} Line</b><br>
+        Route: ${train.fullRouteId}<br>
+        Speed: ${train.speed} km/h<br>
+        Bearing: ${train.bearing}°
+      `);
+
+              // Track when popup is opened
+        marker.on('popupopen', function() {
+          openPopupTrainId = train.id;
+        });
+        
+        // Track when popup is closed
+        marker.on('popupclose', function() {
+          if (openPopupTrainId === train.id) {
+            openPopupTrainId = null;
+          }
+        });
+        
+        // If this train's popup was open before refresh, reopen it
+        if (openPopupTrainId === train.id) {
+          marker.openPopup();
+        }
+      
+      trainMarkers.push(marker);
+    });
+    
+  })
 
   .catch(error => {
     console.error('Error:', error);  // If something went wrong
   });
+}
 
 
-  
+// Call it once on load
+fetchTrains();
+
+setInterval(fetchTrains, 1000);
