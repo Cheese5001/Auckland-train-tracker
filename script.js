@@ -160,7 +160,7 @@ function fetchTrains() {
         }).addTo(map);
         
         const carInfo = train.line !== 'OTHER' && train.cars > 0 
-          ? ` ${train.cars} carriages }<br>` 
+          ? `${train.cars} carriages <br>`
           : '';
         
         marker.bindPopup(`

@@ -1,15 +1,58 @@
-    body { font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; padding: 20px; }
-    #map {
-      height: 500px;
-      width: 100%;
-      margin: 20px 0;
-    }
-    .train-item {
-      padding: 10px;
-      margin: 5px 0;
-      border-left: 4px solid;
-    }
-    .Easten { border-color: #fdb918; }
-    .Onehunga { border-color: #00adef; }
-    .Westen { border-color: #99ca3d; }
-    .Southen { border-color: #ed302a; }
+* {
+  margin: 0px;
+  padding: 0px ;
+}
+
+body { 
+  font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  display: flex; 
+  justify-content: center;
+  flex-direction: column;
+}
+  
+nav {
+    background-color: #be2626; 
+}
+
+
+ul {
+    display:flex;
+    list-style: none;
+    text-decoration: none;
+} 
+   
+li {
+    padding: 15px;
+    text-decoration:none;
+    /* remove underline  -- forgot how*/
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+#map {
+  height: 500px;
+  width: 100%;
+  margin: 20px 0;
+}
+.train-item {
+  padding: 10px;
+  margin: 5px 0;
+  border-left: 4px solid;
+}
+
+#diagram {
+  width: 80%;
+  height: auto;
+  margin: auto;
+  padding : 3%;
+  border: 2px solid black;
+
+}
+
+h1, h2, h3 {
+  text-align: center;
+  margin: 20px 0;
+}
