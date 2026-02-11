@@ -33,9 +33,10 @@ a {
     font-weight: bold;
 }
 #map {
+  padding: 10px;
   height: 500px;
   width: 100%;
-  margin: 20px 0;
+  margin: auto;
 }
 .train-item {
   padding: 10px;
