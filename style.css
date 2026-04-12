@@ -3,11 +3,12 @@
   padding: 0px ;
 }
 
-body { 
+html, body { 
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
   display: flex; 
   justify-content: center;
   flex-direction: column;
+  height: 100%;
 }
   
 nav {
@@ -24,7 +25,6 @@ ul {
 li {
     padding: 15px;
     text-decoration:none;
-    /* remove underline  -- forgot how*/
 }
 
 a {
@@ -34,8 +34,8 @@ a {
 }
 #map {
   padding: 10px;
-  height: 500px;
-  width: 100%;
+  height: 100%;
+  width: 90%;
   margin: auto;
 }
 .train-item {

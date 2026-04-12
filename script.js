@@ -52,7 +52,7 @@ let trainMarkers = [];
 let openPopupTrainId = null;
 
 function fetchTrains() {
-  fetch(apiUrl, {
+  fetch(apiUrl, { 
     headers: {
       'Ocp-Apim-Subscription-Key': apiKey
     }
