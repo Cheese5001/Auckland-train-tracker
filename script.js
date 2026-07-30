@@ -26,7 +26,7 @@ const trainIcons = {
     popupAnchor: [0, -14]
   }),
   'EAST': L.icon({
-    iconUrl: 'train_icons/train_icon_easten.svg',
+    iconUrl: 'train_icons/train_icon_Easten.svg',
     iconSize: [28, 28],
     iconAnchor: [14, 14],
     popupAnchor: [0, -14]
@@ -84,15 +84,18 @@ function fetchTrains() {
             bearing: v.position.bearing || 0,
             isInService: isInServiceTrain,
             isAMP: isAMP,
+            label,
             line: isInServiceTrain ? v.trip.route_id.split('-')[0] : null,
             routeId: isInServiceTrain ? v.trip.route_id : label,
             destination: isInServiceTrain ? (v.trip.trip_headsign || 'Unknown') : 'Out of Service',
             rawData: item
+
           };
         })
         .filter(v => v.isInService || v.isAMP); // Only trains and AMP vehicles
 
       console.log('Total vehicles found:', allVehicles.length);
+      console.log(allVehicles);
 
       // Group in-service trains with nearby out-of-service units
       const finalTrains = [];
@@ -165,10 +168,11 @@ function fetchTrains() {
         
         marker.bindPopup(`
           <b>${train.line === 'OTHER' ? 'AMP Vehicle' : train.line + ' Line'}</b><br>
-          ${train.destination !== 'Out of Service' ? 'Destination: ' + train.destination + '<br>' : ''}
+
           ${carInfo}
+          ${train.label}<br>
           Route: ${train.routeId}<br>
-          Speed: ${train.speed} km/h<br>
+          Speed: ${Math.round(train.speed)} km/h<br>
           Bearing: ${train.bearing}°
         `);
 
